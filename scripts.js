@@ -2,7 +2,7 @@ class Chatbot {
     constructor() {
         this.threadId = ''; // Initialize with an empty thread ID
         this.assistantId = 'asst_rKvkEl86ZDWAfr2h7KE51tK2'; // Static Assistant ID
-        this.baseUrl = 'internal.decisions.com'; // Static Base URL
+        this.baseUrl = 'internal-dev.decisions.com'; // Static Base URL
         this.addEventListeners();
         //this.addWelcomeMessage();
     }
