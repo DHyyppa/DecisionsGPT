@@ -4,6 +4,7 @@ class Chatbot {
         this.assistantId = 'asst_rKvkEl86ZDWAfr2h7KE51tK2'; // Static Assistant ID
         this.baseUrl = 'internal-dev.decisions.com'; // Static Base URL
         this.addEventListeners();
+        this.addWelcomeMessage();
     }
 
     addEventListeners() {
@@ -13,8 +14,8 @@ class Chatbot {
         const downloadButton = document.getElementById('download-button');
 
         sendButton.onclick = () => this.sendMessage();
-        refreshButton.onclick = () => clearMessages();
-        downloadButton.onclick = () => downloadMessages();
+        refreshButton.onclick = () => this.clearMessages();
+        downloadButton.onclick = () => this.downloadMessages();
 
         userInput.addEventListener('keydown', (event) => {
             if (event.ctrlKey && event.keyCode === 13) {
@@ -24,7 +25,11 @@ class Chatbot {
     }
 
     addWelcomeMessage() {
-        this.addMessage('bot', 'Welcome to DecisionsGPT. How can I help you today?');
+        const chatBox = document.getElementById('chat-box');
+        const welcomeMessage = document.createElement('div');
+        welcomeMessage.classList.add('message', 'bot-message');
+        welcomeMessage.textContent = 'Welcome to DecisionsGPT. How can I help you today?';
+        chatBox.appendChild(welcomeMessage);
     }
 
     sendMessage() {
@@ -33,6 +38,7 @@ class Chatbot {
         if (userText !== '') {
             this.addMessage('user', userText);
             userInput.value = '';
+            userInput.style.height = 'auto'; // Reset textarea height
             this.showTypingIndicator();
             const payload = {
                 sessionid: "NS-08daf277-99f3-2854-1c3c-e50e30089599",
@@ -98,15 +104,12 @@ class Chatbot {
         .catch(error => {
             console.error('Error:', error);
             this.addMessage('bot', `Error: ${error.message}`);
+            this.removeTypingIndicator();
         });
     }
 
     handleBotResponse(data) {
-        const typingIndicator = document.getElementById('typing-indicator');
-        if (typingIndicator) {
-            clearInterval(parseInt(typingIndicator.dataset.intervalId, 10));
-            typingIndicator.remove();
-        }
+        this.removeTypingIndicator();
 
         if (data.Done && data.Done.ThreadId) {
             this.threadId = data.Done.ThreadId;
@@ -131,6 +134,14 @@ class Chatbot {
                 const fullMessage = fileLinks ? messageText + "<br>" + fileLinks : messageText;
                 this.addFormattedMessage('bot', fullMessage);
             }
+        }
+    }
+
+    removeTypingIndicator() {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) {
+            clearInterval(parseInt(typingIndicator.dataset.intervalId, 10));
+            typingIndicator.remove();
         }
     }
 
@@ -183,12 +194,32 @@ class Chatbot {
         };
         document.head.appendChild(script);
     }
+
+    clearMessages() {
+        const chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML = '';
+        this.addWelcomeMessage();
+    }
+
+    downloadMessages() {
+        const chatBox = document.getElementById('chat-box');
+        const messages = chatBox.querySelectorAll('.message');
+        let text = '';
+        messages.forEach(message => {
+            text += message.textContent + '\n';
+        });
+
+        const blob = new Blob([text], { type: 'text/plain' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'chat_history.txt';
+        link.click();
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     window.chatbot = new Chatbot();
     chatbot.loadMermaidLibrary();
-    chatbot.addWelcomeMessage();
 });
 
 function autoGrow(element) {
@@ -200,24 +231,4 @@ function autoGrow(element) {
     } else {
         element.style.overflowY = "hidden";
     }
-}
-
-function clearMessages() {
-    const chatBox = document.getElementById('chat-box');
-    chatBox.innerHTML = '';
-}
-
-function downloadMessages() {
-    const chatBox = document.getElementById('chat-box');
-    const messages = chatBox.querySelectorAll('.message');
-    let text = '';
-    messages.forEach(message => {
-        text += message.textContent + '\n';
-    });
-
-    const blob = new Blob([text], { type: 'text/plain' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'chat_history.txt';
-    link.click();
 }
