@@ -86,13 +86,19 @@ class Chatbot {
             },
             body: JSON.stringify(payload),
         })
-            .then(response => response.json())
-            .then(data => {
-                this.handleBotResponse(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            this.handleBotResponse(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            this.addMessage('bot', `Error: ${error.message}`);
+        });
     }
 
     handleBotResponse(data) {
@@ -129,19 +135,12 @@ class Chatbot {
     }
 
     addMessage(sender, message, isTypingIndicator = false) {
-        if (isTypingIndicator) {
-            if (!document.getElementById('typing-indicator')) {
-                const chatBox = document.getElementById('chat-box');
-                const messageElement = document.createElement('div');
-                messageElement.id = 'typing-indicator';
-                messageElement.textContent = "Thinking....";
-                messageElement.style.fontStyle = 'italic';
-                chatBox.appendChild(messageElement);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-        } else {
-            this.addFormattedMessage(sender, message);
-        }
+        const chatBox = document.getElementById('chat-box');
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
+        messageElement.innerHTML = message.replace(/\n/g, '<br>');
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 
     addFormattedMessage(sender, messageHtml) {
