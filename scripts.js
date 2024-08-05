@@ -1,26 +1,6 @@
 const assistantId = window.env.REACT_APP_ASSISTANT_ID;
 const baseUrl = window.env.REACT_APP_BASE_URL;
 const nameSpace = window.env.REACT_APP_NAME_SPACE;
-let hasStartedTyping = false;
-
-document.getElementById('user-input').addEventListener('keydown', (event) => {
-    if (!hasStartedTyping) {
-        hasStartedTyping = true;
-        autoGrow(event.target);
-    }
-});
-
-function autoGrow(element) {
-    if (!hasStartedTyping) return;
-    element.style.height = "5px";
-    element.style.height = (element.scrollHeight) + "px";
-    if (element.scrollHeight > 150) {
-        element.style.height = "150px";
-        element.style.overflowY = "scroll";
-    } else {
-        element.style.overflowY = "hidden";
-    }
-}
 
 class Chatbot {
     constructor() {
