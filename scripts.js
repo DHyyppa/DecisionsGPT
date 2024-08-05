@@ -36,7 +36,6 @@ class Chatbot {
         welcomeMessage.classList.add('message', 'bot-message');
         welcomeMessage.textContent = 'Welcome to DecisionsGPT. How can I help you today?';
         chatBox.appendChild(welcomeMessage);
-        welcomeMessageAdded = true; // Set the flag to indicate the welcome message has been added
     }
 
     sendMessage() {
