@@ -38,6 +38,14 @@ body {
     color: white;
 }
 
+.footer {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ccc;
+}
+
 button {
     margin-left: 10px;
     padding: 10px 20px;

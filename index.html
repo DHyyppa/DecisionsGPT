@@ -21,11 +21,14 @@
             <button id="download-button"><i class="fas fa-download"></i> Download</button>
         </div>
         <div class="chat-box" id="chat-box">
-            <!-- Welcome message will be added here -->
+            <div class="message bot-message">Welcome to DecisionsGPT. How can I help you today?</div>
         </div>
         <div class="input-container">
             <textarea id="user-input" placeholder="Type a message..." oninput="autoGrow(this)"></textarea>
             <button id="send-button"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="footer">
+            DecisionsGPT strives for accuracy but may occasionally make mistakes.
         </div>
     </div>
     <script src="scripts.js"></script>
