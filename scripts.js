@@ -29,14 +29,6 @@ class Chatbot {
         });
     }
 
-    addWelcomeMessage() {
-        const chatBox = document.getElementById('chat-box');
-        const welcomeMessage = document.createElement('div');
-        welcomeMessage.classList.add('message', 'bot-message');
-        welcomeMessage.textContent = 'Welcome to DecisionsGPT. How can I help you today?';
-        chatBox.appendChild(welcomeMessage);
-    }
-
     sendMessage() {
         const userInput = document.getElementById('user-input');
         const userText = userInput.value.trim();
