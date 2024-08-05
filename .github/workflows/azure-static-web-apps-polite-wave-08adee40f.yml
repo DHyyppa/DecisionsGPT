@@ -14,14 +14,16 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
-    env:
-      REACT_APP_ASSISTANT_ID: ${{ secrets.REACT_APP_ASSISTANT_ID }}
-      REACT_APP_BASE_URL: ${{ secrets.REACT_APP_BASE_URL }}
-      REACT_APP_NAME_SPACE: ${{ secrets.REACT_APP_NAME_SPACE }}
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: npm install
+      - name: Inject environment variables
+        run: |
+          echo "window.env = {};" > public/env-config.js
+          echo "window.env.REACT_APP_ASSISTANT_ID = '${{ secrets.REACT_APP_ASSISTANT_ID }}';" >> public/env-config.js
+          echo "window.env.REACT_APP_BASE_URL = '${{ secrets.REACT_APP_BASE_URL }}';" >> public/env-config.js
+          echo "window.env.REACT_APP_NAME_SPACE = '${{ secrets.REACT_APP_NAME_SPACE }}';" >> public/env-config.js
       - name: Build the project
         run: npm run build
       - name: Deploy to Azure Static Web Apps
@@ -31,12 +33,9 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_POLITE_WAVE_08ADEE40F }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
-          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "." # App source code path
+          app_location: "build" # Built app content directory
           api_location: "" # API source code path - optional
-          output_location: "." # Built app content directory - optional
-          ###### End of Repository/Build Configurations ######
+          output_location: "build" # Built app content directory - optional
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
