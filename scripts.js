@@ -29,6 +29,16 @@ class Chatbot {
         });
     }
 
+    addWelcomeMessage() {
+        if (welcomeMessageAdded) return; // Check if the welcome message has already been added
+        const chatBox = document.getElementById('chat-box');
+        const welcomeMessage = document.createElement('div');
+        welcomeMessage.classList.add('message', 'bot-message');
+        welcomeMessage.textContent = 'Welcome to DecisionsGPT. How can I help you today?';
+        chatBox.appendChild(welcomeMessage);
+        welcomeMessageAdded = true; // Set the flag to indicate the welcome message has been added
+    }
+
     sendMessage() {
         const userInput = document.getElementById('user-input');
         const userText = userInput.value.trim();
