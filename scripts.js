@@ -1,12 +1,13 @@
-const assistantId = process.env.ASSISTANT_ID;
-const baseUrl = process.env.BASE_URL;
-const nameSpace = process.env.NAME_SPACE;
+const assistantId = process.env.REACT_APP_ASSISTANT_ID;
+const baseUrl = process.env.REACT_APP_BASE_URL;
+const nameSpace = process.env.REACT_APP_NAME_SPACE;
 
 class Chatbot {
     constructor() {
         this.threadId = ''; // Initialize with an empty thread ID
         this.assistantId = assistantId; // Static Assistant ID
         this.baseUrl = baseUrl; // Static Base URL
+        this.nameSpace = nameSpace; // Static Name Space
         this.addEventListeners();
         this.addWelcomeMessage();
     }
@@ -88,7 +89,7 @@ class Chatbot {
     }
 
     sendMessageToBot(payload) {
-        const url = `http://${this.baseUrl}/Primary/restapi/Flow/01HRZ8W5YCDAEZW516SDNBWQ23`;
+        const url = `https://${this.baseUrl}/Primary/restapi/Flow/01HRZ8W5YCDAEZW516SDNBWQ23`;
         fetch(url, {
             method: 'POST',
             headers: {
