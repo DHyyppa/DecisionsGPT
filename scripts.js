@@ -30,7 +30,6 @@ class Chatbot {
     }
 
     addWelcomeMessage() {
-        if (welcomeMessageAdded) return; // Check if the welcome message has already been added
         const chatBox = document.getElementById('chat-box');
         const welcomeMessage = document.createElement('div');
         welcomeMessage.classList.add('message', 'bot-message');
