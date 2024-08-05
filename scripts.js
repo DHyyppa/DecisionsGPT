@@ -1,8 +1,12 @@
+const assistantId = process.env.ASSISTANT_ID;
+const baseUrl = process.env.BASE_URL;
+const nameSpace = process.env.NAME_SPACE;
+
 class Chatbot {
     constructor() {
         this.threadId = ''; // Initialize with an empty thread ID
-        this.assistantId = 'asst_rKvkEl86ZDWAfr2h7KE51tK2'; // Static Assistant ID
-        this.baseUrl = 'internal-dev.decisions.com'; // Static Base URL
+        this.assistantId = assistantId; // Static Assistant ID
+        this.baseUrl = baseUrl; // Static Base URL
         this.addEventListeners();
         this.addWelcomeMessage();
     }
@@ -41,7 +45,7 @@ class Chatbot {
             userInput.style.height = 'auto'; // Reset textarea height
             this.showTypingIndicator();
             const payload = {
-                sessionid: "NS-08daf277-99f3-2854-1c3c-e50e30089599",
+                sessionid: this.nameSpace,
                 outputtype: "Json",
                 UsersMessage: userText,
                 ThreadId: this.threadId,
@@ -84,7 +88,7 @@ class Chatbot {
     }
 
     sendMessageToBot(payload) {
-        const url = `https://${this.baseUrl}/Primary/restapi/Flow/01HRZ8W5YCDAEZW516SDNBWQ23`;
+        const url = `http://${this.baseUrl}/Primary/restapi/Flow/01HRZ8W5YCDAEZW516SDNBWQ23`;
         fetch(url, {
             method: 'POST',
             headers: {
@@ -125,7 +129,7 @@ class Chatbot {
                 if (messageContent.text.annotations && messageContent.text.annotations.length > 0) {
                     messageContent.text.annotations.forEach(annotation => {
                         if (annotation.file_path && annotation.file_path.file_id && annotation.text) {
-                            const fileUrl = `https://${this.baseUrl}/Primary/?FlowId=01HS6HN1Y88HKEDACEB1S06BQP&&sessionid=NS-08daf277-99f3-2854-1c3c-e50e30089599&ForceFormat=true&file_id=${annotation.file_path.file_id}&Location=Center&Chrome=Off&Shadow=true&BoxShadow=1px%201px%2010px%20rgba(0%2C0%2C0%2C0.3)`;
+                            const fileUrl = `https://${this.baseUrl}/Primary/?FlowId=01HS6HN1Y88HKEDACEB1S06BQP&&sessionid=${this.nameSpace}&ForceFormat=true&file_id=${annotation.file_path.file_id}&Location=Center&Chrome=Off&Shadow=true&BoxShadow=1px%201px%2010px%20rgba(0%2C0%2C0%2C0.3)`;
                             fileLinks += `<a href="${fileUrl}" target="_blank" style="text-decoration: underline; color: blue;">${annotation.text}</a><br>`;
                         }
                     });
@@ -145,7 +149,7 @@ class Chatbot {
         }
     }
 
-    addMessage(sender, message, isTypingIndicator = false) {
+    addMessage(sender, message) {
         const chatBox = document.getElementById('chat-box');
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
@@ -157,18 +161,20 @@ class Chatbot {
     addFormattedMessage(sender, messageHtml) {
         const chatBox = document.getElementById('chat-box');
         messageHtml = messageHtml.replace(/```mermaid\n([\s\S]*?)\n```/g, '[mermaid]\n$1\n[/mermaid]');
-        const [text, mermaidDiagram] = messageHtml.split(/\[mermaid\]([\s\S]*?)\[\/mermaid\]/);
+        const parts = messageHtml.split(/\[mermaid\]([\s\S]*?)\[\/mermaid\]/);
 
-        const textElement = this.createMessageElement(sender, text);
-        chatBox.appendChild(textElement);
-
-        if (mermaidDiagram) {
-            const mermaidElement = document.createElement('div');
-            mermaidElement.className = 'mermaid';
-            mermaidElement.innerHTML = mermaidDiagram.trim();
-            chatBox.appendChild(mermaidElement);
-            mermaid.init(undefined, mermaidElement);
-        }
+        parts.forEach((part, index) => {
+            if (index % 2 === 0) {
+                const textElement = this.createMessageElement(sender, part);
+                chatBox.appendChild(textElement);
+            } else {
+                const mermaidElement = document.createElement('div');
+                mermaidElement.className = 'mermaid';
+                mermaidElement.innerHTML = part.trim();
+                chatBox.appendChild(mermaidElement);
+                mermaid.init(undefined, mermaidElement);
+            }
+        });
 
         chatBox.scrollTop = chatBox.scrollHeight;
     }
