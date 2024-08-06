@@ -226,6 +226,22 @@ class Chatbot {
         link.download = 'chat_history.txt';
         link.click();
     }
+
+    stripMarkdownAndHTML(input) {
+        // Remove HTML tags
+        let output = input.replace(/<\/?[^>]+(>|$)/g, "");
+        // Remove markdown syntax for bold and links
+        output = output.replace(/\*\*(.*?)\*\*/g, "$1"); // bold
+        output = output.replace(/\[(.*?)\]\(.*?\)/g, "$1"); // links
+        // Remove markdown syntax for headers
+        output = output.replace(/^### /gm, "\n");
+        return output.trim();
+    }
+
+    addPlainTextMessage(sender, messageHtml) {
+        const plainText = this.stripMarkdownAndHTML(messageHtml);
+        this.addMessage(sender, plainText);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
