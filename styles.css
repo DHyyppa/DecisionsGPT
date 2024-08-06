@@ -84,12 +84,12 @@ button:hover {
 .chat-box {
     flex: 1;
     overflow-y: auto;
-    padding: 10px;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
-.chat-box::before {
-    content: '';
+.background-image {
     position: absolute;
     top: 0;
     left: 0;
@@ -97,9 +97,17 @@ button:hover {
     height: 100%;
     background: url('https://decisions.com/wp-content/uploads/2022/10/decisions_logo_bird.svg') center center no-repeat;
     background-size: 20%;
-    opacity: 0.1;
+    opacity: 0.1; /* Adjust the opacity to fade the image */
     pointer-events: none;
     z-index: 0;
+}
+
+.messages {
+    position: relative;
+    z-index: 1;
+    padding: 10px;
+    overflow-y: auto;
+    flex: 1;
 }
 
 .message {
@@ -111,8 +119,6 @@ button:hover {
     display: inline-block;
     clear: both;
     white-space: pre-wrap;
-    position: relative;
-    z-index: 1;
     font-size: 14px;
 }
 
