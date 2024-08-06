@@ -136,7 +136,9 @@ class Chatbot {
                     if (index % 2 === 0) {
                         // Remove leading whitespace
                         part = part.replace(/^\s+/, '');
-                        this.addFormattedMessage('bot', part);
+                        if (part.trim()) {
+                            this.addFormattedMessage('bot', part);
+                        }
                     } else {
                         this.addMermaidMessage('bot', part.trim());
                     }
@@ -172,10 +174,13 @@ class Chatbot {
     addMermaidMessage(sender, mermaidCode) {
         const chatBox = document.getElementById('chat-box');
         const mermaidElement = document.createElement('div');
-        mermaidElement.className = 'mermaid';
-        mermaidElement.innerHTML = mermaidCode;
+        mermaidElement.classList.add('message', 'bot-message'); // Make it look like a message
+        const contentElement = document.createElement('div');
+        contentElement.className = 'mermaid';
+        contentElement.innerHTML = mermaidCode;
+        mermaidElement.appendChild(contentElement);
         chatBox.appendChild(mermaidElement);
-        mermaid.init(undefined, mermaidElement);
+        mermaid.init(undefined, contentElement);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
