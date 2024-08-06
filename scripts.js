@@ -125,6 +125,10 @@ class Chatbot {
             const messageContent = latestMessageData.content.find(c => c.type === 'text');
             if (messageContent && messageContent.text) {
                 let messageText = messageContent.text.value;
+
+                // Replace ```mermaid with [mermaid] and ``` with [/mermaid]
+                messageText = messageText.replace(/```mermaid/g, '[mermaid]').replace(/```/g, '[/mermaid]');
+
                 let fileLinks = '';
 
                 if (messageContent.text.annotations && messageContent.text.annotations.length > 0) {
