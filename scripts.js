@@ -129,19 +129,18 @@ class Chatbot {
                 // Replace ```mermaid with [mermaid] and ``` with [/mermaid]
                 messageText = messageText.replace(/```mermaid/g, '[mermaid]').replace(/```/g, '[/mermaid]');
 
-                let fileLinks = '';
+                // Split the messageText to separate normal text and mermaid code
+                const parts = messageText.split(/\[mermaid\]([\s\S]*?)\[\/mermaid\]/);
 
-                if (messageContent.text.annotations && messageContent.text.annotations.length > 0) {
-                    messageContent.text.annotations.forEach(annotation => {
-                        if (annotation.file_path && annotation.file_path.file_id && annotation.text) {
-                            const fileUrl = `https://${this.baseUrl}/Primary/?FlowId=01HS6HN1Y88HKEDACEB1S06BQP&&sessionid=${this.nameSpace}&ForceFormat=true&file_id=${annotation.file_path.file_id}&Location=Center&Chrome=Off&Shadow=true&BoxShadow=1px%201px%2010px%20rgba(0%2C0%2C0%2C0.3)`;
-                            fileLinks += `<a href="${fileUrl}" target="_blank" style="text-decoration: underline; color: blue;">${annotation.text}</a><br>`;
-                        }
-                    });
-                }
-
-                const fullMessage = fileLinks ? messageText + "<br>" + fileLinks : messageText;
-                this.addFormattedMessage('bot', fullMessage);
+                parts.forEach((part, index) => {
+                    if (index % 2 === 0) {
+                        // Remove leading whitespace
+                        part = part.replace(/^\s+/, '');
+                        this.addFormattedMessage('bot', part);
+                    } else {
+                        this.addMermaidMessage('bot', part.trim());
+                    }
+                });
             }
         }
     }
@@ -165,21 +164,18 @@ class Chatbot {
 
     addFormattedMessage(sender, messageHtml) {
         const chatBox = document.getElementById('chat-box');
-        const parts = messageHtml.split(/\[mermaid\]([\s\S]*?)\[\/mermaid\]/);
+        const textElement = this.createMessageElement(sender, messageHtml);
+        chatBox.appendChild(textElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
 
-        parts.forEach((part, index) => {
-            if (index % 2 === 0) {
-                const textElement = this.createMessageElement(sender, part);
-                chatBox.appendChild(textElement);
-            } else {
-                const mermaidElement = document.createElement('div');
-                mermaidElement.className = 'mermaid';
-                mermaidElement.innerHTML = part.trim();
-                chatBox.appendChild(mermaidElement);
-                mermaid.init(undefined, mermaidElement);
-            }
-        });
-
+    addMermaidMessage(sender, mermaidCode) {
+        const chatBox = document.getElementById('chat-box');
+        const mermaidElement = document.createElement('div');
+        mermaidElement.className = 'mermaid';
+        mermaidElement.innerHTML = mermaidCode;
+        chatBox.appendChild(mermaidElement);
+        mermaid.init(undefined, mermaidElement);
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
