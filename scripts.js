@@ -1,6 +1,6 @@
-const assistantId = window.env.REACT_APP_ASSISTANT_ID;
-const baseUrl = window.env.REACT_APP_BASE_URL;
-const nameSpace = window.env.REACT_APP_NAME_SPACE;
+const assistantId = "asst_OQvpPG4t6U6UBFTSk6NMzT20";
+const baseUrl = "internal-dev.decisions.com";
+const nameSpace = "NS-01J4JHRTZGYCSHDHVNBB1X192P";
 
 class Chatbot {
     constructor() {
