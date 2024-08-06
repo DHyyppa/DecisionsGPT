@@ -212,6 +212,7 @@ class Chatbot {
     clearMessages() {
         const chatBox = document.getElementById('chat-box');
         chatBox.innerHTML = '';
+        this.threadId = ''; // Reset the thread ID
         this.addWelcomeMessage();
     }
 
