@@ -229,12 +229,30 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function autoGrow(element) {
-    element.style.height = "5px";
-    element.style.height = (element.scrollHeight) + "px";
-    if (element.scrollHeight > 150) {
-        element.style.height = "150px";
-        element.style.overflowY = "scroll";
+    const minHeight = 46; // Minimum height of the textarea
+    const maxHeight = 150; // Maximum height of the textarea
+
+    // Reset the height to allow for correct measurement of scrollHeight
+    element.style.height = 'auto';
+
+    // Calculate the new height based on scrollHeight
+    let newHeight = element.scrollHeight;
+
+    // Ensure the new height is at least the minimum height
+    if (newHeight < minHeight) {
+        newHeight = minHeight;
+    }
+
+    // Expand the textarea only if the content height exceeds the current height
+    if (newHeight > element.clientHeight && element.clientHeight < maxHeight) {
+        element.style.height = newHeight + 'px';
+    }
+
+    // Add or remove overflow based on the new height
+    if (element.clientHeight >= maxHeight) {
+        element.style.height = maxHeight + 'px';
+        element.style.overflowY = 'scroll';
     } else {
-        element.style.overflowY = "hidden";
+        element.style.overflowY = 'hidden';
     }
 }
