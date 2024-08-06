@@ -161,7 +161,6 @@ class Chatbot {
 
     addFormattedMessage(sender, messageHtml) {
         const chatBox = document.getElementById('chat-box');
-        messageHtml = messageHtml.replace(/```mermaid\n([\s\S]*?)\n```/g, '[mermaid]\n$1\n[/mermaid]');
         const parts = messageHtml.split(/\[mermaid\]([\s\S]*?)\[\/mermaid\]/);
 
         parts.forEach((part, index) => {
