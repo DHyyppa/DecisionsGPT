@@ -1,6 +1,6 @@
 const assistantId = "asst_OQvpPG4t6U6UBFTSk6NMzT20";
-const baseUrl = "internal-dev.decisions.com";
-const nameSpace = "NS-01J4JHRTZGYCSHDHVNBB1X192P";
+const baseUrl = "internal.decisions.com";
+const nameSpace = "NS-08daf277-99f3-2854-1c3c-e50e30089599";
 
 class Chatbot {
     constructor() {
