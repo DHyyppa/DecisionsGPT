@@ -14,11 +14,6 @@ body {
     background-color: #f4f4f4;
 }
 
-p {
-    padding: 0px;
-    margin: 0px;
-}
-
 .chat-container {
     width: 100%;
     max-width: 75%;
@@ -32,6 +27,22 @@ p {
     height: 80vh;
     max-height: 100%;
     position: relative;
+}
+
+.feedback-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
+
+.feedback-container i {
+    cursor: pointer;
+    margin: 0 5px;
+    color: #007bff;
+}
+
+.feedback-container i:hover {
+    color: #0056b3;
 }
 
 .header {
