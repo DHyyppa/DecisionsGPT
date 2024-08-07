@@ -169,15 +169,15 @@ textarea::placeholder {
 /* Mobile view adjustments */
 @media (max-width: 600px) {
     .chat-container {
-        width: 100%;
+        width: 85%;
         height: 100vh;
         max-height: 100vh;
-        max-width: 100%;
+        max-width: 85%;
         border-radius: 0;
     }
 
     .header {
-        padding: 10px;
+        padding: 20px;
     }
 
     .chat-box {
