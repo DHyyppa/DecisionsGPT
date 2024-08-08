@@ -192,22 +192,23 @@ button:hover {
 }
 
 textarea {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #cbcbcb; /* Default border */
-  border-radius: 5px;
-  resize: none;
-  overflow-y: auto;
-  max-height: 150px;
-  font-size: 14px;
-  font-family: Arial, sans-serif;
-  min-height: 46px;
+flex: 1;
+padding: 10px;
+border: 1px solid #cbcbcb; /* Default border */
+border-radius: 5px;
+resize: none;
+overflow-y: auto;
+max-height: 150px;
+font-size: 14px;
+font-family: Arial, sans-serif;
+min-height: 46px;
 }
 
 textarea:focus {
-  border: none; /* Remove border on focus */
-  outline: none; /* Remove default outline on focus */
+border: 1px solid transparent; /* Transparent border on focus */
+outline: none; /* Remove default outline on focus */
 }
+  
 
 textarea::placeholder {
   font-size: 14px;
