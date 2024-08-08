@@ -26,13 +26,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #115aa7; /* Color of the scrollbar thumb */
+  background-color: #c2c2c2; /* Color of the scrollbar thumb */
   border-radius: 10px; /* Rounded corners for the thumb */
   border: 3px solid #f0f0f0; /* Adds space around the thumb for a thinner appearance */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #0c185f; /* Color when hovering over the scrollbar thumb */
+  background-color: #125AA7; /* Color when hovering over the scrollbar thumb */
 }
 
 .message {
