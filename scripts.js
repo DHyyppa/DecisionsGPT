@@ -56,15 +56,6 @@ class Chatbot {
         }
     }
 
-    setValue(data) {
-        if (data && data.assistantId !== this.assistantId) {
-            this.assistantId = data.assistantId;
-        }
-        if (data && data.baseUrl !== this.baseUrl) {
-            this.baseUrl = data.baseUrl;
-        }
-    }
-
     showTypingIndicator() {
         const chatBox = document.getElementById('chat-box');
         let typingIndicator = document.getElementById('typing-indicator');
@@ -119,10 +110,12 @@ class Chatbot {
             this.threadId = data.Done.ThreadId;
         }
 
+        const questionAnswerEntityId = data.Done.QuestionAnswerEntityId || "";
+        console.log("Received QuestionAnswerEntityId:", questionAnswerEntityId); // Log the ID
+
         if (data.Done && data.Done.MessageResponses && data.Done.MessageResponses.data.length > 0) {
             const latestMessageData = data.Done.MessageResponses.data[0];
             const messageContent = latestMessageData.content.find(c => c.type === 'text');
-            const questionAnswerEntityId = latestMessageData.QuestionAnswerEntityId;
             if (messageContent && messageContent.text) {
                 let messageText = messageContent.text.value;
 
@@ -158,13 +151,34 @@ class Chatbot {
         }
     }
 
-    addMessage(sender, message, questionAnswerEntityId = '') {
+    addMessage(sender, message) {
         const chatBox = document.getElementById('chat-box');
         const messageElement = document.createElement('div');
         messageElement.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
         messageElement.innerHTML = message.replace(/\n/g, '<br>');
-        
+        chatBox.appendChild(messageElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    addFormattedMessage(sender, messageHtml, questionAnswerEntityId = '') {
+        const chatBox = document.getElementById('chat-box');
+        const textElement = this.createMessageElement(sender, messageHtml, questionAnswerEntityId);
+        chatBox.appendChild(textElement);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    createMessageElement(sender, text, questionAnswerEntityId = '') {
+        const element = document.createElement('div');
+        element.classList.add('message');
+        element.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+
+        element.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\n/g, '<br>')
+            .replace(/###\s*(.*?)<br>/g, '<h3>$1</h3>')
+            .replace(/\[([^\]]+)]\((http[s]?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+
         if (sender === 'bot' && questionAnswerEntityId) {
+            console.log("Appending feedback icons in createMessageElement."); // Debug log
             const feedbackContainer = document.createElement('div');
             feedbackContainer.classList.add('feedback-container');
             
@@ -179,11 +193,10 @@ class Chatbot {
             feedbackContainer.appendChild(thumbsUp);
             feedbackContainer.appendChild(thumbsDown);
             
-            messageElement.appendChild(feedbackContainer);
+            element.appendChild(feedbackContainer);
         }
-        
-        chatBox.appendChild(messageElement);
-        chatBox.scrollTop = chatBox.scrollHeight;
+
+        return element;
     }
 
     async sendFeedback(questionAnswerEntityId, feedbackResponse) {
@@ -210,47 +223,10 @@ class Chatbot {
 
             const data = await response.json();
             console.log('Feedback sent successfully:', data);
+            this.addMessage('bot', 'Thank you for your feedback, we appreciate your help!');
         } catch (error) {
             console.error('Error sending feedback:', error);
         }
-    }
-
-    addFormattedMessage(sender, messageHtml, questionAnswerEntityId = '') {
-        const chatBox = document.getElementById('chat-box');
-        const textElement = this.createMessageElement(sender, messageHtml, questionAnswerEntityId);
-        chatBox.appendChild(textElement);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    createMessageElement(sender, text, questionAnswerEntityId = '') {
-        const element = document.createElement('div');
-        element.classList.add('message');
-        element.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
-
-        element.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-            .replace(/\n/g, '<br>')
-            .replace(/###\s*(.*?)<br>/g, '<h3 style="margin-top: 10px;">$1</h3>')
-            .replace(/\[([^\]]+)]\((http[s]?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-
-        if (sender === 'bot' && questionAnswerEntityId) {
-            const feedbackContainer = document.createElement('div');
-            feedbackContainer.classList.add('feedback-container');
-            
-            const thumbsUp = document.createElement('i');
-            thumbsUp.classList.add('fas', 'fa-thumbs-up');
-            thumbsUp.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Positive');
-            
-            const thumbsDown = document.createElement('i');
-            thumbsDown.classList.add('fas', 'fa-thumbs-down');
-            thumbsDown.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Negative');
-            
-            feedbackContainer.appendChild(thumbsUp);
-            feedbackContainer.appendChild(thumbsDown);
-            
-            element.appendChild(feedbackContainer);
-        }
-
-        return element;
     }
 
     loadMermaidLibrary() {
@@ -285,6 +261,7 @@ class Chatbot {
     }
 }
 
+// Example from scripts.js
 document.addEventListener('DOMContentLoaded', () => {
     window.chatbot = new Chatbot();
     chatbot.loadMermaidLibrary();
