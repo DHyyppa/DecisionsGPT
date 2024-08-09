@@ -172,6 +172,8 @@ class Chatbot {
     // Clean the rest of the HTML outside of <pre><code> blocks
     html = html.replace(/>\s+</g, '><').trim();
 
+    console.log(html);
+
     // Insert the cleaned HTML into the element
     element.innerHTML = html;
 
