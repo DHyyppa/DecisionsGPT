@@ -99,31 +99,31 @@ class Chatbot {
       const data = await response.json();
       this.handleBotResponse(data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error: ', error);
       this.displayErrorMessage();
       this.removeTypingIndicator();
     }
   }
 
   handleBotResponse(data) {
-      this.removeTypingIndicator();
-  
-      if (data.Done && data.Done.ThreadId) {
-          this.threadId = data.Done.ThreadId;
+    this.removeTypingIndicator();
+
+    if (data.Done && data.Done.ThreadId) {
+      this.threadId = data.Done.ThreadId;
+    }
+
+    const questionAnswerEntityId = data.Done.QuestionAnswerEntityId || "";
+
+    if (data.Done && data.Done.MessageResponses && data.Done.MessageResponses.data.length > 0) {
+      const latestMessageData = data.Done.MessageResponses.data[0];
+      const messageContent = latestMessageData.content.find(c => c.type === 'text');
+
+      if (messageContent && messageContent.text) {
+        let messageText = messageContent.text.value;
+
+        this.addFormattedMessage('bot', messageText.trim(), questionAnswerEntityId);
       }
-  
-      const questionAnswerEntityId = data.Done.QuestionAnswerEntityId || "";
-  
-      if (data.Done && data.Done.MessageResponses && data.Done.MessageResponses.data.length > 0) {
-          const latestMessageData = data.Done.MessageResponses.data[0];
-          const messageContent = latestMessageData.content.find(c => c.type === 'text');
-          
-          if (messageContent && messageContent.text) {
-              let messageText = messageContent.text.value;
-  
-              this.addFormattedMessage('bot', messageText.trim(), questionAnswerEntityId);
-          }
-      }
+    }
   }
 
   removeTypingIndicator() {
@@ -149,7 +149,7 @@ class Chatbot {
     chatBox.appendChild(textElement);
     chatBox.scrollTop = chatBox.scrollHeight;
   }
-  
+
   createMessageElement(sender, text, questionAnswerEntityId = '') {
     const element = document.createElement('div');
     element.classList.add('message');
@@ -165,9 +165,9 @@ class Chatbot {
     // Select all <pre><code> blocks to preserve formatting
     const codeBlocks = doc.querySelectorAll('pre code');
     codeBlocks.forEach(codeBlock => {
-        // Skip cleaning for <pre><code> blocks
-        const codeContent = codeBlock.outerHTML;
-        html = html.replace(codeBlock.outerHTML, codeContent);
+      // Skip cleaning for <pre><code> blocks
+      const codeContent = codeBlock.outerHTML;
+      html = html.replace(codeBlock.outerHTML, codeContent);
     });
 
     // Clean the rest of the HTML outside of <pre><code> blocks
@@ -179,40 +179,42 @@ class Chatbot {
     // Make all links open in a new window
     const links = element.querySelectorAll('a');
     links.forEach(link => {
-        link.setAttribute('target', '_blank');
-        link.setAttribute('rel', 'noopener noreferrer');
+      link.setAttribute('target', '_blank');
+      link.setAttribute('rel', 'noopener noreferrer');
     });
 
-    // Render Mermaid diagrams if any
+    // Define mermaidBlocks here
+    const mermaidBlocks = element.querySelectorAll('code.language-mermaid');
     mermaidBlocks.forEach(block => {
       const parent = block.parentElement;
       const mermaidContainer = document.createElement('div');
-      mermaidContainer.classList.add('mermaid');  
+      mermaidContainer.classList.add('mermaid');
+      mermaidContainer.textContent = block.textContent;
       parent.replaceWith(mermaidContainer);
-  
+
       if (window.mermaid) {
-          mermaid.init(undefined, mermaidContainer);
+        mermaid.init(undefined, mermaidContainer);
       }
     });
 
     console.log(html);
 
     if (sender === 'bot' && questionAnswerEntityId) {
-        const feedbackContainer = document.createElement('div');
-        feedbackContainer.classList.add('feedback-container');
+      const feedbackContainer = document.createElement('div');
+      feedbackContainer.classList.add('feedback-container');
 
-        const thumbsUp = document.createElement('i');
-        thumbsUp.classList.add('fas', 'fa-thumbs-up');
-        thumbsUp.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Positive');
+      const thumbsUp = document.createElement('i');
+      thumbsUp.classList.add('fas', 'fa-thumbs-up');
+      thumbsUp.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Positive');
 
-        const thumbsDown = document.createElement('i');
-        thumbsDown.classList.add('fas', 'fa-thumbs-down');
-        thumbsDown.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Negative');
+      const thumbsDown = document.createElement('i');
+      thumbsDown.classList.add('fas', 'fa-thumbs-down');
+      thumbsDown.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Negative');
 
-        feedbackContainer.appendChild(thumbsUp);
-        feedbackContainer.appendChild(thumbsDown);
+      feedbackContainer.appendChild(thumbsUp);
+      feedbackContainer.appendChild(thumbsDown);
 
-        element.appendChild(feedbackContainer);
+      element.appendChild(feedbackContainer);
     }
 
     return element;

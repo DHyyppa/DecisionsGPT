@@ -137,8 +137,10 @@ button:hover {
 }
 
 .message {
-  margin: 8px 0;  /* Adjust margin between messages */
-  padding: 8px 12px;  /* Reduced padding inside the message container */
+  margin: 8px 0;
+  /* Adjust margin between messages */
+  padding: 8px 12px;
+  /* Reduced padding inside the message container */
   border-radius: 20px;
   max-width: 80%;
   word-wrap: break-word;
@@ -166,13 +168,13 @@ button:hover {
 }
 
 .message pre {
-    position: relative;
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    padding: 12px;
-    margin: 10px 0;
-    overflow-x: auto;
-    white-space: pre-wrap;
+  position: relative;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  padding: 12px;
+  margin: 10px 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
 }
 
 .message pre code {
