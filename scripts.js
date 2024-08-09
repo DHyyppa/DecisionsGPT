@@ -222,7 +222,7 @@ class Chatbot {
     }
 
     return element;
-  }
+}
 
   async sendFeedback(questionAnswerEntityId, feedbackResponse) {
     const url = `https://${this.baseUrl}/Primary/restapi/Flow/01J4Q40YS76HYWF9C1R40F1HYS`;
