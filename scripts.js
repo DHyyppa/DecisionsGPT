@@ -180,11 +180,6 @@ class Chatbot {
     
         // Insert the cleaned HTML into the element
         element.innerHTML = html;
-
-        // Attach event listener to open links in a new tab
-        element.querySelectorAll('a').forEach(link => {
-          link.setAttribute('target', '_blank');
-        });
     
         // Render Mermaid diagrams if any
         const mermaidBlocks = element.querySelectorAll('code.language-mermaid');
