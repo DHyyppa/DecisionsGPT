@@ -175,6 +175,13 @@ class Chatbot {
   
       // Insert the cleaned HTML into the element
       element.innerHTML = html;
+
+      // Make all links open in a new window
+      const links = element.querySelectorAll('a');
+      links.forEach(link => {
+          link.setAttribute('target', '_blank');
+          link.setAttribute('rel', 'noopener noreferrer');
+      });
   
       // Render Mermaid diagrams if any
       const mermaidBlocks = element.querySelectorAll('code.language-mermaid');

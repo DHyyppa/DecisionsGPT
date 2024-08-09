@@ -1,0 +1,15 @@
+JSON:
+
+Create me a json string that represents address information related to usps. I need about 10 records with this json example. These address can be made up as this is for testing purposes.
+
+Use Cases:
+
+Simple / approval workflows:
+    - Build From Stratch: I am building an approval workflow for internal purchase requests. The workflow begins with a form where the user inputs details related to the purchase request. The workflow includes a rule to determine if the purchase amount is less than $500. If the amount is greater than $500, the request requires managerial approval before proceeding. If the amount is less than $500, the request is automatically approved, and an email notification is sent to the user. Once the manager approves or rejects the request, an email is sent to the original user to inform them of the decision.
+    - Email Handling: I want to build a support application in Decisions that processes incoming emails from a Microsoft account and creates support requests in our database. The application should be able to read the emails, process each one, and automatically generate a corresponding support request. How can I accomplish this in Decisions?
+    - Expense Report Approval Workflow: I need a workflow that allows employees to submit expense reports through a form. The workflow includes rules to determine if the total amount exceeds a predefined limit. If the amount is within the limit, the expense is automatically approved and recorded. If it exceeds the limit, it triggers an approval request to a manager, and the employee is notified of the decision via email.
+    - Employee Onboarding Process: An onboarding application that automates the process of integrating new employees into the company. The workflow handles document collection, task assignments (like setting up accounts), and sending reminders to HR and IT departments. It also sends welcome emails and tracks the completion of each onboarding task.
+
+Back End Processing:
+    - An automated backend process that receives JSON-formatted invoices from an external accounting system. The workflow parses the JSON data, validates the invoice details, and checks for any discrepancies (e.g., mismatched amounts or missing information). If the invoice is valid, it’s recorded in the company’s financial database, and a confirmation email is sent to the accounting department. If there are issues, the system generates an error report and sends it to the finance team for review.
+    - A backend workflow that receives JSON data containing customer updates from a CRM system. The workflow parses the JSON, identifies changes (such as address updates or new contact information), and synchronizes this data with the internal customer database. If any conflicts arise (e.g., conflicting information between systems), the workflow logs the discrepancies and triggers a task for manual review. The system also generates a report summarizing the changes and sends it to the data management team.
