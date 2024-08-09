@@ -172,8 +172,6 @@ class Chatbot {
     // Clean the rest of the HTML outside of <pre><code> blocks
     html = html.replace(/>\s+</g, '><').trim();
 
-    console.log(html);
-
     // Insert the cleaned HTML into the element
     element.innerHTML = html;
 
@@ -184,13 +182,22 @@ class Chatbot {
         link.setAttribute('rel', 'noopener noreferrer');
     });
 
-    // Render Mermaid diagrams with error handling
+    // Decode HTML entities in Mermaid code blocks and render diagrams
     const mermaidBlocks = element.querySelectorAll('code.language-mermaid');
     mermaidBlocks.forEach(block => {
         const parent = block.parentElement;
         const mermaidContainer = document.createElement('div');
         mermaidContainer.classList.add('mermaid');
-        mermaidContainer.textContent = block.textContent;
+
+        // Decode HTML entities
+        const decodedContent = block.textContent
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&');
+        
+        mermaidContainer.textContent = decodedContent;
+
+        parent.replaceWith(mermaidContainer);
 
         try {
             if (window.mermaid) {
@@ -222,7 +229,7 @@ class Chatbot {
     }
 
     return element;
-}
+  }
 
   async sendFeedback(questionAnswerEntityId, feedbackResponse) {
     const url = `https://${this.baseUrl}/Primary/restapi/Flow/01J4Q40YS76HYWF9C1R40F1HYS`;
