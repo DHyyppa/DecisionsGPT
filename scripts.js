@@ -151,72 +151,75 @@ class Chatbot {
   }
   
   createMessageElement(sender, text, questionAnswerEntityId = '') {
-      const element = document.createElement('div');
-      element.classList.add('message');
-      element.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
-  
-      // Convert Markdown to HTML
-      let html = marked(text);
-  
-      // Handle Mermaid rendering
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-  
-      // Select all <pre><code> blocks to preserve formatting
-      const codeBlocks = doc.querySelectorAll('pre code');
-      codeBlocks.forEach(codeBlock => {
-          // Skip cleaning for <pre><code> blocks
-          const codeContent = codeBlock.outerHTML;
-          html = html.replace(codeBlock.outerHTML, codeContent);
-      });
-  
-      // Clean the rest of the HTML outside of <pre><code> blocks
-      html = html.replace(/>\s+</g, '><').trim();
-  
-      // Insert the cleaned HTML into the element
-      element.innerHTML = html;
+    const element = document.createElement('div');
+    element.classList.add('message');
+    element.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
 
-      // Make all links open in a new window
-      const links = element.querySelectorAll('a');
-      links.forEach(link => {
-          link.setAttribute('target', '_blank');
-          link.setAttribute('rel', 'noopener noreferrer');
-      });
-  
-      // Render Mermaid diagrams if any
-      const mermaidBlocks = element.querySelectorAll('code.language-mermaid');
-      mermaidBlocks.forEach(block => {
-          const parent = block.parentElement;
-          const mermaidContainer = document.createElement('div');
-          mermaidContainer.classList.add('mermaid');
-          mermaidContainer.textContent = block.textContent;
-  
-          parent.replaceWith(mermaidContainer);
-  
-          if (window.mermaid) {
-              mermaid.init(undefined, mermaidContainer);
-          }
-      });
-  
-      if (sender === 'bot' && questionAnswerEntityId) {
-          const feedbackContainer = document.createElement('div');
-          feedbackContainer.classList.add('feedback-container');
-  
-          const thumbsUp = document.createElement('i');
-          thumbsUp.classList.add('fas', 'fa-thumbs-up');
-          thumbsUp.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Positive');
-  
-          const thumbsDown = document.createElement('i');
-          thumbsDown.classList.add('fas', 'fa-thumbs-down');
-          thumbsDown.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Negative');
-  
-          feedbackContainer.appendChild(thumbsUp);
-          feedbackContainer.appendChild(thumbsDown);
-  
-          element.appendChild(feedbackContainer);
-      }
-  
-      return element;
+    // Convert Markdown to HTML
+    let html = marked(text);
+
+    // Handle Mermaid rendering
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Select all <pre><code> blocks to preserve formatting
+    const codeBlocks = doc.querySelectorAll('pre code');
+    codeBlocks.forEach(codeBlock => {
+        const codeContent = codeBlock.outerHTML;
+        html = html.replace(codeBlock.outerHTML, codeContent);
+    });
+
+    // Clean the rest of the HTML outside of <pre><code> blocks
+    html = html.replace(/>\s+</g, '><').trim();
+
+    // Insert the cleaned HTML into the element
+    element.innerHTML = html;
+
+    // Make all links open in a new window
+    const links = element.querySelectorAll('a');
+    links.forEach(link => {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+    });
+
+    // Render Mermaid diagrams with error handling
+    const mermaidBlocks = element.querySelectorAll('code.language-mermaid');
+    mermaidBlocks.forEach(block => {
+        const parent = block.parentElement;
+        const mermaidContainer = document.createElement('div');
+        mermaidContainer.classList.add('mermaid');
+        mermaidContainer.textContent = block.textContent;
+
+        try {
+            if (window.mermaid) {
+                mermaid.init(undefined, mermaidContainer);
+            }
+        } catch (error) {
+            console.error("Mermaid rendering error:", error);
+            // Suppress the output by removing the container
+            mermaidContainer.remove();
+        }
+    });
+
+    if (sender === 'bot' && questionAnswerEntityId) {
+        const feedbackContainer = document.createElement('div');
+        feedbackContainer.classList.add('feedback-container');
+
+        const thumbsUp = document.createElement('i');
+        thumbsUp.classList.add('fas', 'fa-thumbs-up');
+        thumbsUp.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Positive');
+
+        const thumbsDown = document.createElement('i');
+        thumbsDown.classList.add('fas', 'fa-thumbs-down');
+        thumbsDown.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Negative');
+
+        feedbackContainer.appendChild(thumbsUp);
+        feedbackContainer.appendChild(thumbsDown);
+
+        element.appendChild(feedbackContainer);
+    }
+
+    return element;
   }
 
   async sendFeedback(questionAnswerEntityId, feedbackResponse) {
