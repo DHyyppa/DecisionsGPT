@@ -187,9 +187,7 @@ class Chatbot {
     mermaidBlocks.forEach(block => {
       const parent = block.parentElement;
       const mermaidContainer = document.createElement('div');
-      mermaidContainer.classList.add('mermaid');
-      mermaidContainer.textContent = block.textContent.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-  
+      mermaidContainer.classList.add('mermaid');  
       parent.replaceWith(mermaidContainer);
   
       if (window.mermaid) {
