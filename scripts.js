@@ -74,6 +74,17 @@ class Chatbot {
   
       chatBox.scrollTop = chatBox.scrollHeight;
     }
+
+    // Function to display an error message
+    displayErrorMessage() {
+      const errorMessage = `
+            Oops! Something went wrong. 
+            Please try again and see if the error persists. 
+            An administrator has been notified. 
+            Thank you for your understanding.
+      `;
+      this.addMessage('bot', errorMessage);
+    }
   
     async sendMessageToBot(payload) {
       const url = `https://${this.baseUrl}/Primary/restapi/Flow/01HRZ8W5YCDAEZW516SDNBWQ23`;
@@ -94,31 +105,31 @@ class Chatbot {
         this.handleBotResponse(data);
       } catch (error) {
         console.error('Error:', error);
-        this.addMessage('bot', `Error: ${error.message}`);
+        this.displayErrorMessage();
         this.removeTypingIndicator();
       }
     }
   
-  handleBotResponse(data) {
-      this.removeTypingIndicator();
-  
-      if (data.Done && data.Done.ThreadId) {
-          this.threadId = data.Done.ThreadId;
-      }
-  
-      const questionAnswerEntityId = data.Done.QuestionAnswerEntityId || "";
-  
-      if (data.Done && data.Done.MessageResponses && data.Done.MessageResponses.data.length > 0) {
-          const latestMessageData = data.Done.MessageResponses.data[0];
-          const messageContent = latestMessageData.content.find(c => c.type === 'text');
-          
-          if (messageContent && messageContent.text) {
-              let messageText = messageContent.text.value;
-  
-              this.addFormattedMessage('bot', messageText.trim(), questionAnswerEntityId);
-          }
-      }
-  }
+    handleBotResponse(data) {
+        this.removeTypingIndicator();
+    
+        if (data.Done && data.Done.ThreadId) {
+            this.threadId = data.Done.ThreadId;
+        }
+    
+        const questionAnswerEntityId = data.Done.QuestionAnswerEntityId || "";
+    
+        if (data.Done && data.Done.MessageResponses && data.Done.MessageResponses.data.length > 0) {
+            const latestMessageData = data.Done.MessageResponses.data[0];
+            const messageContent = latestMessageData.content.find(c => c.type === 'text');
+            
+            if (messageContent && messageContent.text) {
+                let messageText = messageContent.text.value;
+    
+                this.addFormattedMessage('bot', messageText.trim(), questionAnswerEntityId);
+            }
+        }
+    }
   
     removeTypingIndicator() {
       const typingIndicator = document.getElementById('typing-indicator');
@@ -143,68 +154,73 @@ class Chatbot {
       chatBox.appendChild(textElement);
       chatBox.scrollTop = chatBox.scrollHeight;
     }
-  
-  createMessageElement(sender, text, questionAnswerEntityId = '') {
-      const element = document.createElement('div');
-      element.classList.add('message');
-      element.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
-  
-      // Convert Markdown to HTML
-      let html = marked(text);
-  
-      // Handle Mermaid rendering
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-  
-      // Select all <pre><code> blocks to preserve formatting
-      const codeBlocks = doc.querySelectorAll('pre code');
-      codeBlocks.forEach(codeBlock => {
-          // Skip cleaning for <pre><code> blocks
-          const codeContent = codeBlock.outerHTML;
-          html = html.replace(codeBlock.outerHTML, codeContent);
-      });
-  
-      // Clean the rest of the HTML outside of <pre><code> blocks
-      html = html.replace(/>\s+</g, '><').trim();
-  
-      // Insert the cleaned HTML into the element
-      element.innerHTML = html;
-  
-      // Render Mermaid diagrams if any
-      const mermaidBlocks = element.querySelectorAll('code.language-mermaid');
-      mermaidBlocks.forEach(block => {
-          const parent = block.parentElement;
-          const mermaidContainer = document.createElement('div');
-          mermaidContainer.classList.add('mermaid');
-          mermaidContainer.textContent = block.textContent;
-  
-          parent.replaceWith(mermaidContainer);
-  
-          if (window.mermaid) {
-              mermaid.init(undefined, mermaidContainer);
-          }
-      });
-  
-      if (sender === 'bot' && questionAnswerEntityId) {
-          const feedbackContainer = document.createElement('div');
-          feedbackContainer.classList.add('feedback-container');
-  
-          const thumbsUp = document.createElement('i');
-          thumbsUp.classList.add('fas', 'fa-thumbs-up');
-          thumbsUp.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Positive');
-  
-          const thumbsDown = document.createElement('i');
-          thumbsDown.classList.add('fas', 'fa-thumbs-down');
-          thumbsDown.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Negative');
-  
-          feedbackContainer.appendChild(thumbsUp);
-          feedbackContainer.appendChild(thumbsDown);
-  
-          element.appendChild(feedbackContainer);
-      }
-  
-      return element;
-  }
+    
+    createMessageElement(sender, text, questionAnswerEntityId = '') {
+        const element = document.createElement('div');
+        element.classList.add('message');
+        element.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+    
+        // Convert Markdown to HTML
+        let html = marked(text);
+    
+        // Handle Mermaid rendering
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+    
+        // Select all <pre><code> blocks to preserve formatting
+        const codeBlocks = doc.querySelectorAll('pre code');
+        codeBlocks.forEach(codeBlock => {
+            // Skip cleaning for <pre><code> blocks
+            const codeContent = codeBlock.outerHTML;
+            html = html.replace(codeBlock.outerHTML, codeContent);
+        });
+    
+        // Clean the rest of the HTML outside of <pre><code> blocks
+        html = html.replace(/>\s+</g, '><').trim();
+    
+        // Insert the cleaned HTML into the element
+        element.innerHTML = html;
+
+        // Attach event listener to open links in a new tab
+        element.querySelectorAll('a').forEach(link => {
+          link.setAttribute('target', '_blank');
+        });
+    
+        // Render Mermaid diagrams if any
+        const mermaidBlocks = element.querySelectorAll('code.language-mermaid');
+        mermaidBlocks.forEach(block => {
+            const parent = block.parentElement;
+            const mermaidContainer = document.createElement('div');
+            mermaidContainer.classList.add('mermaid');
+            mermaidContainer.textContent = block.textContent;
+    
+            parent.replaceWith(mermaidContainer);
+    
+            if (window.mermaid) {
+                mermaid.init(undefined, mermaidContainer);
+            }
+        });
+    
+        if (sender === 'bot' && questionAnswerEntityId) {
+            const feedbackContainer = document.createElement('div');
+            feedbackContainer.classList.add('feedback-container');
+    
+            const thumbsUp = document.createElement('i');
+            thumbsUp.classList.add('fas', 'fa-thumbs-up');
+            thumbsUp.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Positive');
+    
+            const thumbsDown = document.createElement('i');
+            thumbsDown.classList.add('fas', 'fa-thumbs-down');
+            thumbsDown.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Negative');
+    
+            feedbackContainer.appendChild(thumbsUp);
+            feedbackContainer.appendChild(thumbsDown);
+    
+            element.appendChild(feedbackContainer);
+        }
+    
+        return element;
+    }
   
     async sendFeedback(questionAnswerEntityId, feedbackResponse) {
       const url = `https://${this.baseUrl}/Primary/restapi/Flow/01J4Q40YS76HYWF9C1R40F1HYS`;
@@ -232,6 +248,7 @@ class Chatbot {
         this.addMessage('bot', 'Thank you for your feedback, we appreciate your help!');
       } catch (error) {
         console.error('Error sending feedback:', error);
+        this.displayErrorMessage();
       }
     }
   
