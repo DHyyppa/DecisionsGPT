@@ -157,12 +157,10 @@ class Chatbot {
 
     // Convert Markdown to HTML
     let html = marked(text);
-    console.log("HTML after Markdown conversion:", html);
 
     // Handle Mermaid rendering
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
-    console.log("Document after parsing HTML:", doc.body.innerHTML);
 
     // Select all <pre><code> blocks to preserve formatting
     const codeBlocks = doc.querySelectorAll('pre code');
@@ -172,19 +170,14 @@ class Chatbot {
       html = html.replace(codeBlock.outerHTML, codeContent);
     });
 
-    console.log("HTML after preserving <pre><code> blocks:", html);
-
     // Clean the rest of the HTML outside of <pre><code> blocks
     html = html.replace(/>\s+</g, '><').trim();
-    console.log("HTML after cleaning:", html);
 
     // Replace encoded characters for Mermaid diagrams
     html = html.replace(/&amp;gt;/g, '>').replace(/&amp;lt;/g, '<');
-    console.log("HTML after replacing encoded characters:", html);
 
     // Insert the cleaned HTML into the element
     element.innerHTML = html;
-    console.log("Final HTML inserted into the element:", element.innerHTML);
 
     // Make all links open in a new window
     const links = element.querySelectorAll('a');
@@ -202,10 +195,7 @@ class Chatbot {
 
       // Extract the Mermaid content and replace encoded characters
       let mermaidContent = block.textContent;
-      console.log("Original Mermaid content:", mermaidContent);
-      mermaidContent = mermaidContent.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
       mermaidContainer.textContent = mermaidContent;
-      console.log("Processed Mermaid content:", mermaidContainer.textContent);
 
       parent.replaceWith(mermaidContainer);
 
