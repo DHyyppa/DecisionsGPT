@@ -165,6 +165,7 @@ class Chatbot {
     // Select all <pre><code> blocks to preserve formatting
     const codeBlocks = doc.querySelectorAll('pre code');
     codeBlocks.forEach(codeBlock => {
+        // Skip cleaning for <pre><code> blocks
         const codeContent = codeBlock.outerHTML;
         html = html.replace(codeBlock.outerHTML, codeContent);
     });
@@ -182,33 +183,22 @@ class Chatbot {
         link.setAttribute('rel', 'noopener noreferrer');
     });
 
-    // Decode HTML entities in Mermaid code blocks and render diagrams
+    // Render Mermaid diagrams if any
     const mermaidBlocks = element.querySelectorAll('code.language-mermaid');
     mermaidBlocks.forEach(block => {
         const parent = block.parentElement;
         const mermaidContainer = document.createElement('div');
         mermaidContainer.classList.add('mermaid');
-
-        // Decode HTML entities
-        const decodedContent = block.textContent
-            .replace(/&lt;/g, '<')
-            .replace(/&gt;/g, '>')
-            .replace(/&amp;/g, '&');
-        
-        mermaidContainer.textContent = decodedContent;
+        mermaidContainer.textContent = block.textContent;
 
         parent.replaceWith(mermaidContainer);
 
-        try {
-            if (window.mermaid) {
-                mermaid.init(undefined, mermaidContainer);
-            }
-        } catch (error) {
-            console.error("Mermaid rendering error:", error);
-            // Suppress the output by removing the container
-            mermaidContainer.remove();
+        if (window.mermaid) {
+            mermaid.init(undefined, mermaidContainer);
         }
     });
+
+    console.log(html);
 
     if (sender === 'bot' && questionAnswerEntityId) {
         const feedbackContainer = document.createElement('div');
@@ -229,7 +219,7 @@ class Chatbot {
     }
 
     return element;
-  }
+}
 
   async sendFeedback(questionAnswerEntityId, feedbackResponse) {
     const url = `https://${this.baseUrl}/Primary/restapi/Flow/01J4Q40YS76HYWF9C1R40F1HYS`;
