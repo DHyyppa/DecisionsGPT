@@ -152,7 +152,7 @@ button:hover {
 }
 
 .message p {
-  margin: 10px 0;
+  margin: 8px 0;
   padding: 0;
 }
 
@@ -195,12 +195,12 @@ button:hover {
 
 .message ul,
 .message ol {
-  margin: 10px 0;
+  margin: 5px 0;
   padding-left: 1.5em;
 }
 
 .message li {
-  margin: 8px 0;
+  margin: 5px 0;
   line-height: 1.4;
 }
 
