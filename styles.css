@@ -148,11 +148,11 @@ button:hover {
   clear: both;
   white-space: pre-wrap;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.4;
 }
 
 .message p {
-  margin: 8px 0;
+  margin: 10px 0;
   padding: 0;
 }
 
@@ -189,18 +189,18 @@ button:hover {
 .message h4,
 .message h5,
 .message h6 {
-  margin: 10px 0;
-  line-height: 1.4;
+  margin: 15px 0;
+  line-height: 2;
 }
 
 .message ul,
 .message ol {
-  margin: 8px 0;
+  margin: 10px 0;
   padding-left: 1.5em;
 }
 
 .message li {
-  margin: 5px 0;
+  margin: 8px 0;
   line-height: 1.4;
 }
 
