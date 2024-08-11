@@ -251,18 +251,22 @@ textarea::placeholder {
 @media (max-width: 600px) {
   .chat-container {
     width: 85%;
-    height: 100vh;
-    max-height: 100vh;
+    height: 100vh; /* Ensure full viewport height */
+    max-height: 100vh; /* Prevent overflow beyond the viewport height */
     max-width: 85%;
     border-radius: 0;
+    overflow: hidden; /* Ensure content stays within the container */
   }
 
-  .header {
-    padding: 20px;
+  .header, .footer {
+    flex-shrink: 0; /* Ensure header and footer do not shrink */
+    padding: 10px; /* Consistent padding */
   }
 
   .chat-box {
     padding: 5px;
+    flex: 1; /* Allow chat-box to fill available space */
+    overflow-y: auto; /* Enable scrolling within chat-box */
   }
 
   .message {
