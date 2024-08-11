@@ -3,6 +3,7 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  overflow: hidden;
   font-family: Arial, sans-serif;
 }
 
@@ -35,15 +36,16 @@ body {
 
 .chat-container {
   width: 100%;
-  max-width: 85%;
+  max-width: 75%;
   border: 1px solid #cbcbcb;
   border-radius: 10px;
   background-color: #fff;
+  overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-height: 100vh;
+  height: 80vh;
+  max-height: 100%;
   position: relative;
 }
 
@@ -136,7 +138,9 @@ button:hover {
 
 .message {
   margin: 8px 0;
+  /* Adjust margin between messages */
   padding: 8px 12px;
+  /* Reduced padding inside the message container */
   border-radius: 20px;
   max-width: 80%;
   word-wrap: break-word;
@@ -219,7 +223,6 @@ button:hover {
   border-top: 1px solid #ccc;
   padding: 10px;
   background-color: #cbcbcb;
-  position: relative;
 }
 
 textarea {
@@ -247,9 +250,10 @@ textarea::placeholder {
 
 @media (max-width: 600px) {
   .chat-container {
-    width: 90%;
+    width: 85%;
     height: 100vh;
     max-height: 100vh;
+    max-width: 85%;
     border-radius: 0;
   }
 
@@ -269,7 +273,6 @@ textarea::placeholder {
 
   .input-container {
     padding: 5px;
-    border-radius: 0 0 10px 10px;
   }
 
   textarea {
