@@ -1,7 +1,7 @@
 class Chatbot {
   constructor() {
     this.threadId = ''; // Initialize with an empty thread ID
-    this.assistantId = "asst_OQvpPG4t6U6UBFTSk6NMzT20";
+    this.assistantId = "asst_Lak1AmEMg34Bv53vYHEA4Zac";
     this.baseUrl = "internal.decisions.com";
     this.nameSpace = "NS-08daf277-99f3-2854-1c3c-e50e30089599";
     this.addEventListeners();
