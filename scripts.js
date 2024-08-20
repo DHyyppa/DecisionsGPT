@@ -1,7 +1,7 @@
 class Chatbot {
   constructor() {
     this.threadId = ''; // Initialize with an empty thread ID
-    this.assistantId = "asst_bylIJs3VyG330Ac6bIzQolN0";
+    this.assistantId = "asst_ALdJUvFJqCgXSXNHmHjEVutb";
     this.baseUrl = "internal.decisions.com";
     this.nameSpace = "NS-08daf277-99f3-2854-1c3c-e50e30089599";
     this.addEventListeners();
@@ -29,7 +29,7 @@ class Chatbot {
     const chatBox = document.getElementById('chat-box');
     const welcomeMessage = document.createElement('div');
     welcomeMessage.classList.add('message', 'bot-message');
-    welcomeMessage.textContent = 'Welcome to DecisionsGPT. How can I help you today?';
+    welcomeMessage.textContent = 'Welcome to the Decisions DocBot! How can I assist you today?';
     chatBox.appendChild(welcomeMessage);
   }
 
@@ -77,7 +77,7 @@ class Chatbot {
 
   // Function to display an error message
   displayErrorMessage() {
-    const errorMessage = `Oops! Something went wrong.\nPlease try again and see if the error persists.\nAn administrator has been notified.\nThank you for your understanding.`;
+    const errorMessage = `Oops! Something went wrong.`;
     this.addMessage('bot', errorMessage);
   }
 
