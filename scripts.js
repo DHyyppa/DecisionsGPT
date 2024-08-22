@@ -5,7 +5,7 @@ class Chatbot {
     this.baseUrl = "internal.decisions.com";
     this.nameSpace = "NS-08daf277-99f3-2854-1c3c-e50e30089599";
     this.addEventListeners();
-    this.addWelcomeMessage();
+    this.sendWelcomeMessage(); // Send the initial blank message on load
   }
 
   addEventListeners() {
@@ -25,12 +25,15 @@ class Chatbot {
     });
   }
 
-  addWelcomeMessage() {
-    const chatBox = document.getElementById('chat-box');
-    const welcomeMessage = document.createElement('div');
-    welcomeMessage.classList.add('message', 'bot-message');
-    welcomeMessage.textContent = 'Welcome to the Decisions DocBot! How can I assist you today?';
-    chatBox.appendChild(welcomeMessage);
+  sendWelcomeMessage() {
+    const payload = {
+      sessionid: this.nameSpace,
+      outputtype: "Json",
+      UsersMessage: "", // Send an empty message
+      ThreadId: this.threadId,
+      AssistantId: this.assistantId
+    };
+    this.sendMessageToBot(payload);
   }
 
   sendMessage() {
@@ -203,24 +206,6 @@ class Chatbot {
         mermaid.init(undefined, mermaidContainer);
       }
     });
-
-    if (sender === 'bot' && questionAnswerEntityId) {
-      const feedbackContainer = document.createElement('div');
-      feedbackContainer.classList.add('feedback-container');
-
-      const thumbsUp = document.createElement('i');
-      thumbsUp.classList.add('fas', 'fa-thumbs-up');
-      thumbsUp.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Positive');
-
-      const thumbsDown = document.createElement('i');
-      thumbsDown.classList.add('fas', 'fa-thumbs-down');
-      thumbsDown.onclick = () => this.sendFeedback(questionAnswerEntityId, 'Negative');
-
-      feedbackContainer.appendChild(thumbsUp);
-      feedbackContainer.appendChild(thumbsDown);
-
-      element.appendChild(feedbackContainer);
-    }
 
     return element;
   }

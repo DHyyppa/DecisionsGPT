@@ -49,23 +49,6 @@ body {
   position: relative;
 }
 
-.feedback-container {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 5px;
-}
-
-.feedback-container i {
-  cursor: pointer;
-  margin: 0 5px;
-  padding: 0;
-  color: #115aa7;
-}
-
-.feedback-container i:hover {
-  color: #0c185f;
-}
-
 .header {
   display: flex;
   justify-content: space-between;
@@ -138,9 +121,7 @@ button:hover {
 
 .message {
   margin: 8px 0;
-  /* Adjust margin between messages */
   padding: 8px 12px;
-  /* Reduced padding inside the message container */
   border-radius: 20px;
   max-width: 80%;
   word-wrap: break-word;
@@ -148,11 +129,11 @@ button:hover {
   clear: both;
   white-space: pre-wrap;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .message p {
-  margin: 8px 0;
+  margin: 0;
   padding: 0;
 }
 
