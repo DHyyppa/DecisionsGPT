@@ -5,7 +5,7 @@ class Chatbot {
     this.baseUrl = "internal.decisions.com";
     this.nameSpace = "NS-08daf277-99f3-2854-1c3c-e50e30089599";
     this.addEventListeners();
-    this.addWelcomeMessage(); // Send the initial blank message on load
+    this.sendWelcomeMessage(); // Send the initial blank message on load
   }
 
   addEventListeners() {
@@ -284,8 +284,8 @@ class Chatbot {
     const chatBox = document.getElementById('chat-box');
     chatBox.innerHTML = '';
     this.threadId = ''; // Reset the thread ID
-    this.addWelcomeMessage();
-  }
+    this.sendWelcomeMessage(); // Send the initial blank message on load
+}
 
   downloadMessages() {
     const chatBox = document.getElementById('chat-box');
