@@ -5,7 +5,7 @@ class Chatbot {
     this.baseUrl = "internal.decisions.com";
     this.nameSpace = "NS-08daf277-99f3-2854-1c3c-e50e30089599";
     this.addEventListeners();
-    this.sendWelcomeMessage(); // Send the initial blank message on load
+    this.addWelcomeMessage(); // Send the initial blank message on load
   }
 
   addEventListeners() {
@@ -24,6 +24,35 @@ class Chatbot {
       }
     });
   }
+
+  addWelcomeMessage() {
+    const chatBox = document.getElementById('chat-box');
+    const welcomeMessages = [
+        "Hello! How can I assist you with the Decisions platform today?",
+        "Welcome to Decisions DocBot! How can I support your work today?",
+        "Hi there! Need help with workflows or features in Decisions?",
+        "Good day! How can I assist you with the Decisions platform?",
+        "Welcome! What can I help you explore in Decisions today?",
+        "Greetings! How can I assist with your Decisions platform needs?",
+        "Hello! How can I help with your Decisions platform questions?",
+        "Welcome! How can I support your use of the Decisions platform?",
+        "Hi! How can I assist with workflows or features today?",
+        "Good to see you! What can I help you with in Decisions?",
+        "Hello! How can I assist you with the Decisions platform today?",
+        "Welcome to Decisions DocBot! How can I help you today?",
+        "Hi there! Ready to explore the Decisions platform together?",
+        "Greetings! Need assistance with anything on the Decisions platform?",
+        "Hello! How can I enhance your experience with Decisions today?"
+    ];
+    
+    const randomIndex = Math.floor(Math.random() * welcomeMessages.length);
+    const selectedMessage = welcomeMessages[randomIndex];
+
+    const welcomeMessage = document.createElement('div');
+    welcomeMessage.classList.add('message', 'bot-message');
+    welcomeMessage.textContent = selectedMessage;
+    chatBox.appendChild(welcomeMessage);
+}
 
   sendWelcomeMessage() {
     const payload = {
@@ -255,7 +284,7 @@ class Chatbot {
     const chatBox = document.getElementById('chat-box');
     chatBox.innerHTML = '';
     this.threadId = ''; // Reset the thread ID
-    this.sendWelcomeMessage();
+    this.addWelcomeMessage();
   }
 
   downloadMessages() {
