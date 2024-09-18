@@ -278,3 +278,32 @@ textarea::placeholder {
     font-size: 10px;
   }
 }
+
+/* --- New CSS Additions --- */
+
+/* Style the feedback container to arrange icons horizontally with spacing */
+.feedback-container {
+  display: flex;
+  align-items: center;
+  gap: 7.5px; /* Adjust spacing between icons as needed */
+  margin-top: 5px; /* Optional: Add top margin to separate from message text */
+}
+
+/* Style the feedback buttons (icons) */
+.feedback-button {
+  color: #115aa7; /* Set icon color to #115AA7 */
+  font-size: 1em; /* Adjust icon size as needed */
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+/* Optional: Change icon color on hover for better UX */
+.feedback-button:hover {
+  color: #0c185f; /* Darker shade on hover */
+}
+
+/* Optional: Style for disabled feedback buttons */
+.feedback-button.disabled {
+  cursor: not-allowed;
+  color: #ccc; /* Greyed out color */
+}
