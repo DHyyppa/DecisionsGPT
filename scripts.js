@@ -297,6 +297,12 @@ class Chatbot {
 
       // Disable feedback buttons after submission
       if (feedbackContainer) {
+        feedbackContainer.querySelectorAll('.feedback-button').forEach(button => {
+          button.classList.add('disabled');
+          button.style.pointerEvents = 'none';
+          button.style.opacity = '0.6';
+        });
+
         // Optionally show a confirmation message
         const confirmation = document.createElement('span');
         confirmation.classList.add('feedback-confirmation');
