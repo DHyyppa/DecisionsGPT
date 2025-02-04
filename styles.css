@@ -34,7 +34,28 @@ body {
   background-color: #125aa7;
 }
 
+/* Banner styles */
+.banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ffcc00;
+  color: #000;
+  text-align: center;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 550;
+  z-index: 1000;
+}
+
+.banner a {
+  color: #0c185f;
+  text-decoration: underline;
+}
+
 .chat-container {
+  margin-top: 60px;
   width: 100%;
   max-width: 75%;
   border: 1px solid #cbcbcb;
