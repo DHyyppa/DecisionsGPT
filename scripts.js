@@ -5,6 +5,7 @@ class Chatbot {
       this.nameSpace = "NS-01JGM57RCAKJ6FTR7M917PN5B2";
       this.addEventListeners();
       this.addWelcomeMessage(); // Send the initial blank message on load
+      this.UserEmail = "Docbot_URL";
     }
   
     addEventListeners() {
@@ -65,7 +66,8 @@ class Chatbot {
           sessionid: this.nameSpace,
           outputtype: "Json",
           UsersMessage: userText,
-          ThreadId: this.threadId
+          ThreadId: this.threadId,
+          UserEmail: this.UserEmail
         };
         this.sendMessageToBot(payload);
       }
@@ -101,7 +103,7 @@ class Chatbot {
     }
   
     async sendMessageToBot(payload) {
-      const url = `https://${this.baseUrl}/Primary/restapi/Flow/01J6TCMNY02PX4VZ5HABJCCJWC`;
+      const url = `https://${this.baseUrl}/Primary/restapi/Flow/01JKAZ63F85XF8PAH0A4N2TJDA`;
       try {
         const response = await fetch(url, {
           method: 'POST',
