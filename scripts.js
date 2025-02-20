@@ -1,11 +1,21 @@
 class Chatbot {
     constructor() {
+      // Check the URL for ?docbot=test
+      const urlParams = new URLSearchParams(window.location.search);
+      const isTestMode = urlParams.get('docbot') === 'test';
+
+
       this.threadId = ''; // Initialize with an empty thread ID
       this.baseUrl = "docbotcopilot.decisions.com"; // Ensure this matches your API endpoint
       this.nameSpace = "NS-01JGM57RCAKJ6FTR7M917PN5B2";
+      this.docbotFlowID = isTestMode 
+        ? "01JMGM0H5MSBD9BCDJ84JZ5VZ7" 
+        : "01JKAZ63F85XF8PAH0A4N2TJDA";
+      this.UserEmail = isTestMode 
+        ? "derek@decisions.com" 
+        : "Docbot_URL";
       this.addEventListeners();
       this.addWelcomeMessage(); // Send the initial blank message on load
-      this.UserEmail = "Docbot_URL";
     }
   
     addEventListeners() {
@@ -103,7 +113,7 @@ class Chatbot {
     }
   
     async sendMessageToBot(payload) {
-      const url = `https://${this.baseUrl}/Primary/restapi/Flow/01JKAZ63F85XF8PAH0A4N2TJDA`;
+      const url = `https://${this.baseUrl}/Primary/restapi/Flow/${this.docbotFlowID}`;
       try {
         const response = await fetch(url, {
           method: 'POST',
