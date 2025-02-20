@@ -4,7 +4,6 @@ class Chatbot {
       const urlParams = new URLSearchParams(window.location.search);
       const isTestMode = urlParams.get('docbot') === 'test';
 
-
       this.threadId = ''; // Initialize with an empty thread ID
       this.baseUrl = "docbotcopilot.decisions.com"; // Ensure this matches your API endpoint
       this.nameSpace = "NS-01JGM57RCAKJ6FTR7M917PN5B2";
@@ -114,6 +113,8 @@ class Chatbot {
   
     async sendMessageToBot(payload) {
       const url = `https://${this.baseUrl}/Primary/restapi/Flow/${this.docbotFlowID}`;
+      console.log(this.docbotFlowID);
+      
       try {
         const response = await fetch(url, {
           method: 'POST',
